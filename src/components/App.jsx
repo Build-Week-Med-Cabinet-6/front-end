@@ -28,7 +28,18 @@ function App() {
 
   const onLoginSubmit = evt => {
     evt.preventDefault();
-    // check if the formValues email and password exist in the users state.
+
+    for(let i = 0; i < users.length; i++) {
+      const userEmail = users[i].email;
+      const userPassword = users[i].password;
+
+      // If this user's email and password matches the form values 
+      // go to the /home route and break out of this loop.
+      if(userEmail === formValues.email && userPassword === formValues.password) { 
+        history.push("/home");
+        break;
+      }
+    }
   }
 
   const onRegisterSubmit = evt => {
@@ -45,6 +56,9 @@ function App() {
   return (
     <div className="App">
       <Switch>
+        <Route path="/home">
+          <h1>Home Page</h1>
+        </Route>
         <Route path="/register">
           <Register 
             onInputChange={onInputChange} 
