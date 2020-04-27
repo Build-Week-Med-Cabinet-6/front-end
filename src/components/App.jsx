@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 
 // Components
-import { Login, Register } from './AuthForms.component';
+import Login from './Login';
+import Register from './Register';
 
 function App() {
   const initialFormValues = {
