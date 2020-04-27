@@ -1,4 +1,7 @@
 import React, {useState} from 'react';
+import { Switch, Route, Link } from 'react-router-dom';
+
+// Components
 import { Login, Register } from './AuthForms.component';
 
 function App() {
@@ -26,8 +29,24 @@ function App() {
 
   return (
     <div className="App">
-      <Login onInputChange={onInputChange} onFormSubmit={onFormSubmit} formValues={formValues}/>
-      <Register onInputChange={onInputChange} onFormSubmit={onFormSubmit} formValues={formValues}/>
+      <Switch>
+        <Route path="/register">
+          <Register 
+            onInputChange={onInputChange} 
+            onFormSubmit={onFormSubmit} 
+            formValues={formValues}
+          />
+          <Link to="/">Login</Link> {/* This link is for testing the Routes */}
+        </Route>
+        <Route path="/">
+          <Login 
+            onInputChange={onInputChange} 
+            onFormSubmit={onFormSubmit} 
+            formValues={formValues}
+          />
+          <Link to="/register">Register</Link>
+        </Route>
+      </Switch>
     </div>
   );
 }
