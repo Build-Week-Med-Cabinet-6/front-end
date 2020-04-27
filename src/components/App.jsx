@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route, Link, useHistory } from 'react-router-dom';
 
 // Components
 import Login from './Login';
@@ -13,6 +13,8 @@ function App() {
   }
 
   const [formValues, setFormValues] = useState(initialFormValues);
+  const [users, setUsers] = useState([]);
+  const history = useHistory();
 
   const onInputChange = evt => {
     const name = evt.target.name;
@@ -24,9 +26,21 @@ function App() {
     });
   }
 
-  const onFormSubmit = evt => {
+  const onLoginSubmit = evt => {
     evt.preventDefault();
+    // check if the formValues email and password exist in the users state.
   }
+
+  const onRegisterSubmit = evt => {
+    evt.preventDefault();
+    setFormValues(initialFormValues);
+    history.push("/");
+    return setUsers([
+      ...users,
+      formValues,
+    ]);
+  }
+
 
   return (
     <div className="App">
@@ -34,15 +48,14 @@ function App() {
         <Route path="/register">
           <Register 
             onInputChange={onInputChange} 
-            onFormSubmit={onFormSubmit} 
+            onRegisterSubmit={onRegisterSubmit} 
             formValues={formValues}
           />
-          <Link to="/">Login</Link> {/* This link is for testing the Routes */}
         </Route>
         <Route path="/">
           <Login 
             onInputChange={onInputChange} 
-            onFormSubmit={onFormSubmit} 
+            onLoginSubmit={onLoginSubmit} 
             formValues={formValues}
           />
           <Link to="/register">Register</Link>

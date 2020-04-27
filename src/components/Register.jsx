@@ -1,7 +1,7 @@
 import React from 'react';
 
 function Register(props) {
-  const {onInputChange, onFormSubmit, formValues} = props;
+  const {onInputChange, onRegisterSubmit, formValues} = props;
   return(
     <form>
       <label htmlFor="name">Name</label>
@@ -10,7 +10,7 @@ function Register(props) {
       <input onChange={onInputChange} type="text" name="email" id="email" value={formValues.email}/>
       <label htmlFor="password">Password</label>
       <input onChange={onInputChange} type="password" name="password" id="password" value={formValues.password}/>
-      <input onClick={onFormSubmit} type="submit" value="Register" />
+      <input onClick={onRegisterSubmit} type="submit" value="Register" />
   </form>
   );
 }
