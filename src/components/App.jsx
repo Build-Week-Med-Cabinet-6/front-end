@@ -4,6 +4,7 @@ import { Switch, Route, Link, useHistory } from 'react-router-dom';
 // Components
 import Login from './Login';
 import Register from './Register';
+import Search from './Search';
 
 function App() {
   const initialFormValues = {
@@ -12,6 +13,7 @@ function App() {
     password: "",
   }
 
+  const [searchString, setSearchString] = useState("");
   const [formValues, setFormValues] = useState(initialFormValues);
   const [users, setUsers] = useState([]);
   const history = useHistory();
@@ -36,7 +38,7 @@ function App() {
       // If this user's email and password matches the form values 
       // go to the /home route and break out of this loop.
       if(userEmail === formValues.email && userPassword === formValues.password) { 
-        history.push("/home");
+        history.push("/search");
         break;
       }
     }
@@ -52,12 +54,29 @@ function App() {
     ]);
   }
 
+  const onSearchSubmit = evt => {
+    evt.preventDefault();
+    setSearchString("");
+    console.log(searchString);
+  }
+
+  const addSearchTerm = evt => {
+    const searchTerm = evt.target.value;
+
+    if(!searchString.includes(searchTerm)) {
+      if(searchString === "") { // If this is the first search term
+        return setSearchString(searchTerm);
+      }
+  
+      return setSearchString(`${searchString}, ${searchTerm}`);
+    }
+  }
 
   return (
     <div className="App">
       <Switch>
-        <Route path="/home">
-          <h1>Home Page</h1>
+        <Route path="/search">
+          <Search onAddSearchTerm={addSearchTerm} onSearchSubmit={onSearchSubmit}/>
         </Route>
         <Route path="/register">
           <Register 
