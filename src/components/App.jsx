@@ -6,6 +6,8 @@ import Login from './Login';
 import Register from './Register';
 import Search from './Search';
 import StrainsList from './StrainsList';
+import Header from './Header';
+import Profile from './Profile';
 
 function App() {
   const initialFormValues = {
@@ -94,10 +96,14 @@ function App() {
   return (
     <div className="App">
       <Switch>
+        <Route path="/profile">
+          <Profile />
+        </Route>
         <Route path="/search-query">
           <StrainsList strainsArray={strains}/>
         </Route>
         <Route path="/search">
+          <Header />
           <Search onAddSearchTerm={addSearchTerm} onSearchSubmit={onSearchSubmit}/>
         </Route>
         <Route path="/register">
