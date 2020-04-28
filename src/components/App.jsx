@@ -13,11 +13,22 @@ function App() {
     email: "",
     password: "",
   }
+  const initialStrains = [
+    {
+      name: "Strain name",
+      effects: "Effects...",
+      flavors: "Flavors...",
+      description: "Strain description... Lorem Ipsum",
+    }
+  ]
 
-  const [searchString, setSearchString] = useState("");
+  const history = useHistory();
+
   const [formValues, setFormValues] = useState(initialFormValues);
   const [users, setUsers] = useState([]);
-  const history = useHistory();
+  const [searchString, setSearchString] = useState("");
+  const [strains, setStrains] = useState(initialStrains);
+
 
   const onInputChange = evt => {
     const name = evt.target.name;
@@ -78,7 +89,7 @@ function App() {
     <div className="App">
       <Switch>
         <Route path="/search-query">
-          <StrainsList array={[1,2,3]}/>
+          <StrainsList strainsArray={strains}/>
         </Route>
         <Route path="/search">
           <Search onAddSearchTerm={addSearchTerm} onSearchSubmit={onSearchSubmit}/>

@@ -1,14 +1,14 @@
 import React from 'react';
 import StrainsCard from './StrainsCard';
 
-function StrainsList({ array }) {
+function StrainsList({ strainsArray }) {
   return(
     <div
-      style={{ width: "90%", maxWidth: "550px", margin: "0 auto" }}
+      style={{ width: "90%", maxWidth: "550px", margin: "10% auto" }}
     >
-      {array.map(item => {
+      {strainsArray.map(strain => {
           return (
-            <StrainsCard />
+            <StrainsCard strain={strain}/>
           );
         })}
     </div>
