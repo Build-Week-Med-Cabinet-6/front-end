@@ -97,6 +97,7 @@ function App() {
     <div className="App">
       <Switch>
         <Route path="/profile">
+          <Header />
           <Profile />
         </Route>
         <Route path="/search-query">
