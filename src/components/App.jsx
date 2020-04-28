@@ -5,6 +5,7 @@ import { Switch, Route, Link, useHistory } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import Search from './Search';
+import StrainsCard from './StrainsCard';
 
 function App() {
   const initialFormValues = {
@@ -75,6 +76,9 @@ function App() {
   return (
     <div className="App">
       <Switch>
+        <Route path="/query">
+          <StrainsCard />
+        </Route>
         <Route path="/search">
           <Search onAddSearchTerm={addSearchTerm} onSearchSubmit={onSearchSubmit}/>
         </Route>
