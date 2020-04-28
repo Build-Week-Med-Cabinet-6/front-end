@@ -58,6 +58,7 @@ function App() {
   const onSearchSubmit = evt => {
     evt.preventDefault();
     setSearchString("");
+    history.push("/search-query");
     console.log(searchString);
   }
 
@@ -76,7 +77,7 @@ function App() {
   return (
     <div className="App">
       <Switch>
-        <Route path="/query">
+        <Route path="/search-query">
           <StrainsList array={[1,2,3]}/>
         </Route>
         <Route path="/search">
