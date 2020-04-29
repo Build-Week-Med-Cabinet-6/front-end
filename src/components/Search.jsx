@@ -9,18 +9,41 @@ function Search({ strainsQuery }) {
   };
 
   const [searchStrings, setSearchStrings] = useState(initialSearchStrings);
+  const [textSearch, setTextSearch] = useState("");
+
+  const generateUrlEncodedParams = (keyValuesArray) => { // keyValuesArray should be an array of arrays.
+    const params = new URLSearchParams();                // each array containing the key and value at respective indexes.
+    keyValuesArray.forEach(pair => {
+      params.append(pair[0], pair[2]);
+    });
+
+    return params;
+  }
+
+  const onTextSearch = (evt) => {
+    evt.preventDefault();
+
+    const params = generateUrlEncodedParams([["text", textSearch]]);
+
+    axios.post(`${url}/search`, params)
+    .then(res => strainsQuery(res.data))
+    .catch(err => console.log(err));
+  }
 
   const onSearchSubmit = (evt) => {
     evt.preventDefault();
-
-    const params = new URLSearchParams(); // generate parameters in correct format 
-    params.append('effects', searchStrings.effects);
-    params.append('flavors', searchStrings.flavors);
+    const paramsArray = [
+      ['effects', searchStrings.effects],
+      ['flavors', searchStrings.flavors]
+    ];
+    const params = generateUrlEncodedParams(paramsArray)
 
     axios.post(`${url}/query`, params)
     .then(res => strainsQuery(res.data))
     .catch(err => console.log(err));
   }
+
+  const onSearchTextChange = (evt) => setTextSearch(evt.target.value);
 
   const onAddSearchTerm = (evt) => {
     const searchTerm = evt.target.value;
@@ -38,6 +61,8 @@ function Search({ strainsQuery }) {
 
   return(
     <form>
+      <label htmlFor="search">Search:</label>
+      <input onChange={onSearchTextChange} type="text" name="search" id="search" value={textSearch}/>
       <label htmlFor="effects">Effects:</label>
       <select onChange={onAddSearchTerm} id="effects" multiple>
         <option value="aroused">aroused</option>
@@ -54,7 +79,8 @@ function Search({ strainsQuery }) {
         <option value="berry">berry</option>
       </select>
 
-      <button onClick={onSearchSubmit}>Search</button>
+      <button onClick={onSearchSubmit}>Search with Dropdowns</button>
+      <button onClick={onTextSearch}>Search with text box</button>
     </form>
   );
 }
