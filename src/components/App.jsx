@@ -32,37 +32,11 @@ function App() {
       description: "Strain description... Lorem Ipsum",
     }
   ];
-  const initialSearchStrings = {
-    effects: "",
-    flavors: "",
-  };
 
   const history = useHistory();
 
   const [formValues, setFormValues] = useState(initialFormValues);
-  const [searchStrings, setSearchStrings] = useState(initialSearchStrings);
   const [strains, setStrains] = useState(initialStrains);
-
-  const onSearchSubmit = (evt) => {
-    evt.preventDefault();
-    setSearchStrings(initialSearchStrings);
-    history.push("/search-query");
-    console.log(searchStrings);
-  }
-
-  const addSearchTerm = (evt) => {
-    const searchTerm = evt.target.value;
-    const targetId = evt.target.id;
-    const targetSearchString = searchStrings[targetId];
-    const searchString = targetSearchString 
-      ? `${targetSearchString}, ${searchTerm}`
-      : searchTerm;
-  
-    return setSearchStrings({
-      ...searchStrings,
-      [targetId]: searchString,
-    });
-  }
 
   return (
     <Route>

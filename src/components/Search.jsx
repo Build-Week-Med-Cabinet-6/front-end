@@ -1,6 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function Search({ onAddSearchTerm, onSearchSubmit }) {
+function Search(props) {
+
+  const initialSearchStrings = {
+    effects: "",
+    flavors: "",
+  };
+
+  const [searchStrings, setSearchStrings] = useState(initialSearchStrings);
+
+  const onSearchSubmit = (evt) => {
+    evt.preventDefault();
+    console.log(searchStrings);
+    setSearchStrings(initialSearchStrings);
+  }
+
+  const onAddSearchTerm = (evt) => {
+    const searchTerm = evt.target.value;
+    const targetId = evt.target.id;
+    const targetSearchString = searchStrings[targetId];
+    const searchString = targetSearchString 
+      ? `${targetSearchString}, ${searchTerm}`
+      : searchTerm;
+  
+    return setSearchStrings({
+      ...searchStrings,
+      [targetId]: searchString,
+    });
+  }
+
   return(
     <form>
       <label htmlFor="effects">Effects:</label>
