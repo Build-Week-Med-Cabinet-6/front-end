@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import Auth from "./auth";
+import Search from "./Search";
 import Home from "./Home";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -9,7 +10,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={(props) => {
         if (Auth.isAuthenticated()) {
-          return <Home {...props} />;
+          return <Search {...props} />;
         } else {
           return <Redirect to="/login" />;
         }

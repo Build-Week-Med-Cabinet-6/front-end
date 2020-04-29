@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import StrainsList from './StrainsList';
+
 function Search(props) {
   const url = "https://medcab6api.herokuapp.com/products";
 
@@ -10,23 +12,18 @@ function Search(props) {
   };
 
   const [searchStrings, setSearchStrings] = useState(initialSearchStrings);
-
-  useEffect(() => {
-    console.log("effect triggered");
-    
-    axios.get(`${url}/fetch`)
-      .then(res => res.data)
-      .then(data => console.log(data));
-  }, []);
+  const [strainsQuery, setStrainsQuery] = useState([]);
 
   const onSearchSubmit = (evt) => {
     evt.preventDefault();
 
-    axios.post(`https://medcab6api.herokuapp.com/products/query?effects=creative&flavor=apple`)
-      .then(res => {
-        return console.log(res.data);
-      })
-      .catch(err => console.log(err));
+    const params = new URLSearchParams();
+    params.append('effects', searchStrings.effects);
+    params.append('flavors', searchStrings.flavors);
+
+    axios.post(`${url}/query`, params)
+    .then(res => setStrainsQuery(res.data))
+    .catch(err => console.log(err));
   }
 
   const onAddSearchTerm = (evt) => {
@@ -44,25 +41,28 @@ function Search(props) {
   }
 
   return(
-    <form>
-      <label htmlFor="effects">Effects:</label>
-      <select onChange={onAddSearchTerm} id="effects" multiple>
-        <option value="aroused">aroused</option>
-        <option value="creative">creative</option>
-        <option value="energetic">energetic</option>
-        <option value="euphoric">euphoric</option>
-      </select>
+    <div>
+      <form>
+        <label htmlFor="effects">Effects:</label>
+        <select onChange={onAddSearchTerm} id="effects" multiple>
+          <option value="aroused">aroused</option>
+          <option value="creative">creative</option>
+          <option value="energetic">energetic</option>
+          <option value="euphoric">euphoric</option>
+        </select>
 
-      <label htmlFor="flavors">Flavors:</label>
-      <select onChange={onAddSearchTerm} id="flavors" multiple>
-        <option value="ammonia">ammonia</option>
-        <option value="apple">apple</option>
-        <option value="apricot">apricot</option>
-        <option value="berry">berry</option>
-      </select>
+        <label htmlFor="flavors">Flavors:</label>
+        <select onChange={onAddSearchTerm} id="flavors" multiple>
+          <option value="ammonia">ammonia</option>
+          <option value="apple">apple</option>
+          <option value="apricot">apricot</option>
+          <option value="berry">berry</option>
+        </select>
 
-      <button onClick={onSearchSubmit}>Search</button>
-    </form>
+        <button onClick={onSearchSubmit}>Search</button>
+      </form>
+      <StrainsList strainsArray={strainsQuery}/>
+    </div>
   );
 }
 
