@@ -1,6 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-function Search({ onAddSearchTerm, onSearchSubmit}) {
+function Search(props) {
+  const url = "https://medcab6api.herokuapp.com/products";
+
+  const initialSearchStrings = {
+    effects: "",
+    flavors: "",
+  };
+
+  const [searchStrings, setSearchStrings] = useState(initialSearchStrings);
+
+  useEffect(() => {
+    console.log("effect triggered");
+    
+    axios.get(`${url}/fetch`)
+      .then(res => res.data)
+      .then(data => console.log(data));
+  }, []);
+
+  const onSearchSubmit = (evt) => {
+    evt.preventDefault();
+
+    axios.post(`https://medcab6api.herokuapp.com/products/query?effects=creative&flavor=apple`)
+      .then(res => {
+        return console.log(res.data);
+      })
+      .catch(err => console.log(err));
+  }
+
+  const onAddSearchTerm = (evt) => {
+    const searchTerm = evt.target.value;
+    const targetId = evt.target.id;
+    const targetSearchString = searchStrings[targetId];
+    const searchString = targetSearchString 
+      ? `${targetSearchString}, ${searchTerm}`
+      : searchTerm;
+  
+    return setSearchStrings({
+      ...searchStrings,
+      [targetId]: searchString,
+    });
+  }
+
   return(
     <form>
       <label htmlFor="effects">Effects:</label>

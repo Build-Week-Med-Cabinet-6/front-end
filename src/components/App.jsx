@@ -9,12 +9,14 @@ import {
 } from "react-router-dom";
 
 // Components
-import Login from "./Login";
-import Register from "./Register";
-import Search from "./Search";
+import Login from './Login';
+import Register from './Register';
+import Home from './Home';
+import StrainsList from './StrainsList';
+import Header from './Header';
+import Profile from './Profile';
 
 // route
-
 import PrivateRoute from "./PrivateRoute";
 
 function App() {
@@ -23,66 +25,19 @@ function App() {
     email: "",
     password: "",
   };
+  const initialStrains = [
+    {
+      name: "Strain name",
+      effects: "Effects...",
+      flavors: "Flavors...",
+      description: "Strain description... Lorem Ipsum",
+    }
+  ];
 
-  const [searchString, setSearchString] = useState("");
-  const [formValues, setFormValues] = useState(initialFormValues);
-  const [users, setUsers] = useState([]);
   const history = useHistory();
 
-  const onInputChange = (evt) => {
-    const name = evt.target.name;
-    const value = evt.target.value;
-
-    return setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  };
-
-  const onLoginSubmit = (evt) => {
-    evt.preventDefault();
-
-    for (let i = 0; i < users.length; i++) {
-      const userEmail = users[i].email;
-      const userPassword = users[i].password;
-
-      // If this user's email and password matches the form values
-      // go to the /home route and break out of this loop.
-      if (
-        userEmail === formValues.email &&
-        userPassword === formValues.password
-      ) {
-        history.push("/search");
-        break;
-      }
-    }
-  };
-
-  const onRegisterSubmit = (evt) => {
-    evt.preventDefault();
-    setFormValues(initialFormValues);
-    history.push("/");
-    return setUsers([...users, formValues]);
-  };
-
-  const onSearchSubmit = (evt) => {
-    evt.preventDefault();
-    setSearchString("");
-    console.log(searchString);
-  };
-
-  const addSearchTerm = (evt) => {
-    const searchTerm = evt.target.value;
-
-    if (!searchString.includes(searchTerm)) {
-      if (searchString === "") {
-        // If this is the first search term
-        return setSearchString(searchTerm);
-      }
-
-      return setSearchString(`${searchString}, ${searchTerm}`);
-    }
-  };
+  const [formValues, setFormValues] = useState(initialFormValues);
+  const [strains, setStrains] = useState(initialStrains);
 
   return (
     <Route>
@@ -103,7 +58,7 @@ function App() {
           <Route exact path="/" component={Register} />
 
           <Route exact path="/login" component={Login} />
-          <PrivateRoute exact path="/protected" component={SearchComp} />
+          <PrivateRoute exact path="/protected" component={Home} />
           <Route path="/register" component={Register} />
           <Route component={Register} />
         </Switch>
