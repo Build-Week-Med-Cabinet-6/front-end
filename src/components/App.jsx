@@ -11,6 +11,7 @@ import {
 // Components
 import Login from './Login';
 import Register from './Register';
+import Home from './Home';
 import StrainsList from './StrainsList';
 import Header from './Header';
 import Profile from './Profile';
@@ -57,7 +58,7 @@ function App() {
           <Route exact path="/" component={Register} />
 
           <Route exact path="/login" component={Login} />
-          <PrivateRoute exact path="/protected" component={SearchComp} />
+          <PrivateRoute exact path="/protected" component={Home} />
           <Route path="/register" component={Register} />
           <Route component={Register} />
         </Switch>
