@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Search({ onAddSearchTerm, onSearchSubmit}) {
+function Search({ onAddSearchTerm, onSearchSubmit }) {
   return(
     <form>
       <label htmlFor="effects">Effects:</label>

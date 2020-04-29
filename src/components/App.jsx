@@ -1,20 +1,29 @@
-import React, {useState} from 'react';
-import { Switch, Route, Link, useHistory } from 'react-router-dom';
+import React, { useState } from "react";
+import SearchComp from "./Search";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch,
+  useHistory,
+} from "react-router-dom";
 
 // Components
 import Login from './Login';
 import Register from './Register';
-import Search from './Search';
 import StrainsList from './StrainsList';
 import Header from './Header';
 import Profile from './Profile';
+
+// route
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   const initialFormValues = {
     name: "",
     email: "",
     password: "",
-  }
+  };
   const initialStrains = [
     {
       name: "Strain name",
@@ -22,64 +31,26 @@ function App() {
       flavors: "Flavors...",
       description: "Strain description... Lorem Ipsum",
     }
-  ]
+  ];
   const initialSearchStrings = {
     effects: "",
     flavors: "",
-  }
+  };
 
   const history = useHistory();
 
   const [formValues, setFormValues] = useState(initialFormValues);
-  const [users, setUsers] = useState([]);
   const [searchStrings, setSearchStrings] = useState(initialSearchStrings);
   const [strains, setStrains] = useState(initialStrains);
 
-
-  const onInputChange = evt => {
-    const name = evt.target.name;
-    const value = evt.target.value;
-
-    return setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  }
-
-  const onLoginSubmit = evt => {
+  const onSearchSubmit = (evt) => {
     evt.preventDefault();
-
-    for(let i = 0; i < users.length; i++) {
-      const userEmail = users[i].email;
-      const userPassword = users[i].password;
-
-      // If this user's email and password matches the form values 
-      // go to the /home route and break out of this loop.
-      if(userEmail === formValues.email && userPassword === formValues.password) { 
-        history.push("/search");
-        break;
-      }
-    }
-  }
-
-  const onRegisterSubmit = evt => {
-    evt.preventDefault();
-    setFormValues(initialFormValues);
-    history.push("/");
-    return setUsers([
-      ...users,
-      formValues,
-    ]);
-  }
-
-  const onSearchSubmit = evt => {
-    evt.preventDefault();
-    setSearchStrings("");
+    setSearchStrings(initialSearchStrings);
     history.push("/search-query");
     console.log(searchStrings);
   }
 
-  const addSearchTerm = evt => {
+  const addSearchTerm = (evt) => {
     const searchTerm = evt.target.value;
     const targetId = evt.target.id;
     const targetSearchString = searchStrings[targetId];
@@ -94,36 +65,30 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Switch>
-        <Route path="/profile">
-          <Header />
-          <Profile />
-        </Route>
-        <Route path="/search-query">
-          <StrainsList strainsArray={strains}/>
-        </Route>
-        <Route path="/search">
-          <Header />
-          <Search onAddSearchTerm={addSearchTerm} onSearchSubmit={onSearchSubmit}/>
-        </Route>
-        <Route path="/register">
-          <Register 
-            onInputChange={onInputChange} 
-            onRegisterSubmit={onRegisterSubmit} 
-            formValues={formValues}
-          />
-        </Route>
-        <Route path="/">
-          <Login 
-            onInputChange={onInputChange} 
-            onLoginSubmit={onLoginSubmit} 
-            formValues={formValues}
-          />
-          <Link to="/register">Register</Link>
-        </Route>
-      </Switch>
-    </div>
+    <Route>
+      <div className="App">
+        <ul>
+          <li>
+            <Link to="/Login">Login</Link>
+          </li>
+          <li>
+            <Link to="/protected">Protected Page</Link>
+          </li>
+          <li>
+            <Link to="/register">Sign Up</Link>
+          </li>
+        </ul>
+        <Switch>
+          <PrivateRoute exact path="/protected" component={PrivateRoute} />
+          <Route exact path="/" component={Register} />
+
+          <Route exact path="/login" component={Login} />
+          <PrivateRoute exact path="/protected" component={SearchComp} />
+          <Route path="/register" component={Register} />
+          <Route component={Register} />
+        </Switch>
+      </div>
+    </Route>
   );
 }
 
