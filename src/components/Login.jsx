@@ -1,16 +1,88 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import { render } from "react-dom";
+import * as Yup from "yup";
+import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 
-function Login(props) {
-  const {onInputChange, onLoginSubmit, formValues} = props;
-  return(
-    <form>
-      <label htmlFor="email">Email</label>
-      <input onChange={onInputChange} type="text" name="email" id="email" value={formValues.email}/>
-      <label htmlFor="password">Password</label>
-      <input onChange={onInputChange} type="password" name="password" id="password" value={formValues.password}/>
-      <input onClick={onLoginSubmit} type="submit" value="Login" />
-    </form>
-  );
-}
+import { withFormik, Form, Field } from "formik";
+import axios from "axios";
+import auth from "./auth";
+const Login = (
+  {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    onInputChange,
+    onRegisterSubmit,
+    formValue,
+  },
+  props
+) => (
+  <Form>
+    <div>
+      <p>Login:</p>
+      <Field
+        type="text"
+        name="username"
+        placeholder="Username"
+        className="fields"
+      />
+      {touched.username && errors.username && <p>{errors.username}</p>}
+    </div>
 
-export default Login;
+    <div>
+      <Field
+        type="password"
+        name="password"
+        placeholder="Password"
+        className="fields"
+      />
+      {touched.password && errors.password && <p>{errors.password}</p>}
+    </div>
+
+    <button
+      disabled={isSubmitting}
+      onClick={() => {
+        auth.login(() => {});
+      }}
+    >
+      Submit
+    </button>
+  </Form>
+);
+
+const FormikSignIn = withFormik({
+  mapPropsToValues({ username, password }) {
+    return {
+      username: username || "",
+      password: password || "",
+    };
+  },
+  validationSchema: Yup.object().shape({
+    username: Yup.string().min(4).required("Username is required"),
+    password: Yup.string().required("Password is required"),
+  }),
+  handleSubmit(
+    values,
+    { resetForm, setErrors, setSubmitting, setStatus, props }
+  ) {
+    console.log(values);
+
+    resetForm();
+    props.history.push("/protected");
+    setSubmitting(false);
+
+    axios
+      .post("https://medcabinets.herokuapp.com/api/auth/login", values)
+      .then((res) => {
+        console.log("login", res);
+        setStatus(res.data);
+        props.history.push("/protected");
+      })
+      .catch((err) => console.log("error", err));
+  },
+})(Login);
+
+render(<FormikSignIn />, document.getElementById("root"));
+
+export default FormikSignIn;
