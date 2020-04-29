@@ -16,10 +16,6 @@ function Header() {
         padding: "0 2rem",
       }}
     >
-      <nav style={{ width: "12%", display: "flex", justifyContent: "space-between" }}>
-        <Link to="/profile">Profile</Link>
-        <Link to="/search">Search</Link>
-      </nav>
     </div>
   );
 }

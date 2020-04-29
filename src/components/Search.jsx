@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Search(props) {
+function Search({ strainsQuery }) {
   const url = "https://medcab6api.herokuapp.com/products";
-
   const initialSearchStrings = {
     effects: "",
     flavors: "",
@@ -11,22 +10,16 @@ function Search(props) {
 
   const [searchStrings, setSearchStrings] = useState(initialSearchStrings);
 
-  useEffect(() => {
-    console.log("effect triggered");
-    
-    axios.get(`${url}/fetch`)
-      .then(res => res.data)
-      .then(data => console.log(data));
-  }, []);
-
   const onSearchSubmit = (evt) => {
     evt.preventDefault();
 
-    axios.post(`https://medcab6api.herokuapp.com/products/query?effects=creative&flavor=apple`)
-      .then(res => {
-        return console.log(res.data);
-      })
-      .catch(err => console.log(err));
+    const params = new URLSearchParams(); // generate parameters in correct format 
+    params.append('effects', searchStrings.effects);
+    params.append('flavors', searchStrings.flavors);
+
+    axios.post(`${url}/query`, params)
+    .then(res => strainsQuery(res.data))
+    .catch(err => console.log(err));
   }
 
   const onAddSearchTerm = (evt) => {
