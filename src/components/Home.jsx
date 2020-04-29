@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
+import Header from './Header';
 import Search from './Search';
 import StrainsList from './StrainsList';
 
@@ -9,10 +11,15 @@ function Home() {
   const strainsQuery = (query) => setStrains(query);
 
   return(
-    <div>
-      <Search strainsQuery={strainsQuery}/>
-      <StrainsList strainsArray={strains}/>
-    </div>
+    <>
+      <Header>
+        <Search strainsQuery={strainsQuery}/>
+        <Link to="/profile">Profile</Link>
+      </Header>
+      <div>
+        <StrainsList strainsArray={strains}/>
+      </div>
+    </>
   );
 }
 
