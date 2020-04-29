@@ -12,6 +12,7 @@ import {
 import Login from './Login';
 import Register from './Register';
 import Home from './Home';
+import Profile from './Profile';
 
 // route
 import PrivateRoute from "./PrivateRoute";
@@ -23,6 +24,8 @@ function App() {
         <Switch>
           <PrivateRoute exact path="/protected" component={PrivateRoute} />
           <Route exact path="/" component={Register} />
+
+          <Route path="/profile" component={Profile}/>
 
           <Route exact path="/login" component={Login} />
           <PrivateRoute exact path="/protected" component={Home} />

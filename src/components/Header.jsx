@@ -1,23 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import styled from "styled-components";
 
-function Header() {
-  return (
-    <div
-      style={{ 
-        width: "100vw", 
-        height: "10vh",
-        display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "center",
-        backgroundColor: "#FAFAFA",
-        borderBottom: "solid 1px #E1E1E1",
-        marginBottom: "1rem",
-        padding: "0 2rem",
-      }}
-    >
-    </div>
-  );
-}
+const Header = styled.div`
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FAFAFA;
+  border-bottom: solid 1px #E1E1E1;
+  margin-bottom: 1rem;
+  padding: 0 2rem;
+`;
 
 export default Header;
