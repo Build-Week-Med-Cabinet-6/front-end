@@ -24,22 +24,14 @@ function App() {
       <div className="App">
         <Switch>
           <PrivateRoute exact path="/protected" component={PrivateRoute} />
-          <Route exact path="/">
-            <Wrapper>
-              <Login />
-            </Wrapper>
-          </Route>
+          <Route exact path="/" component={Login} />
 
           <Route path="/profile" component={Profile}/>
 
           <Route exact path="/login" component={Login} />
           <PrivateRoute exact path="/protected" component={Home} />
-          <Route path="/register">
-            <Wrapper>
-              <Register />
-            </Wrapper>
-          </Route>
-          <Route component={Register} />
+          <Route path="/register" component={Register} />
+          <Route component={Login} />
         </Switch>
       </div>
     </Route>
