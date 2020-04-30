@@ -23,7 +23,10 @@ function App() {
       <div className="App">
         <Switch>
           <PrivateRoute exact path="/protected" component={PrivateRoute} />
-          <Route exact path="/" component={Register} />
+          <Route exact path="/">
+            <Login />
+            <Link to="/register">Register</Link>
+          </Route>
 
           <Route path="/profile" component={Profile}/>
 
