@@ -6,9 +6,7 @@ function FormErrorAlert({render, errorMessage = "foobar"}) { // Default text is 
     <Alert 
     style={{ 
       visibility: render ? "visible" : "hidden",
-      fontSize: "10px",
-      padding: '5px',
-      marginTop: '5px'
+      
     }}
     color="danger"
     >

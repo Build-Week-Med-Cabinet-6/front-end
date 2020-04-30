@@ -4,8 +4,9 @@ import * as Yup from "yup";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import { Button } from 'reactstrap';
 
-import Wrapper from './Wrapper';
-import FormErrorAlert from './FormErrorAlert';
+import Wrapper from './Wrapper.style';
+import FormContainer from './FormContainer.style';
+import FormErrorAlert from './FormErrorAlert.style';
 import { withFormik, Form, Field } from "formik";
 import axios from "axios";
 import auth from "./auth";
@@ -21,47 +22,49 @@ const Login = (
   },
   props
 ) => (
-  <Wrapper top>
-    <Form>
-      <FormErrorAlert render={errors.username} errorMessage={errors.username}/>
-      <FormErrorAlert render={errors.password && touched.password} errorMessage={errors.password}/>
-      <div>
-        <p>Login:</p>
-        <Field
-          type="text"
-          name="username"
-          placeholder="Username"
-          className="fields"
-        />
-      </div>
+  <Wrapper>
+    <FormContainer>
+      <Form>
+        <FormErrorAlert render={errors.username} errorMessage={errors.username}/>
+        <FormErrorAlert render={errors.password && touched.password} errorMessage={errors.password}/>
+        <div>
+        <h2 className="h1">Login</h2>
+          <Field
+            type="text"
+            name="username"
+            placeholder="Username"
+            className="fields"
+          />
+        </div>
 
-      <div>
-        <Field
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="fields"
-        />
-      </div>
-      <Button
-      type="submit"
-        disabled={isSubmitting}
-        onClick={() => {
-          auth.login(() => {});
-        }}
-        color={
-          values.username 
-          && !errors.username 
-          && values.password 
-          && !errors.password 
-            ? "success" 
-            : "secondary"
-        }
-      >
-        Submit
-      </Button>
-      <Link to="/register">Register</Link>
-    </Form>
+        <div>
+          <Field
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="fields"
+          />
+        </div>
+        <Button
+        type="submit"
+          disabled={isSubmitting}
+          onClick={() => {
+            auth.login(() => {});
+          }}
+          color={
+            values.username 
+            && !errors.username 
+            && values.password 
+            && !errors.password 
+              ? "success" 
+              : "secondary"
+          }
+        >
+          Submit
+        </Button>
+        <Link to="/register">Register</Link>
+      </Form>
+    </FormContainer>
   </Wrapper>
 );
 
