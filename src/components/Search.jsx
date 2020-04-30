@@ -31,7 +31,7 @@ function Search({ strainsQuery }) {
   const generateUrlEncodedParams = (keyValuesArray) => { // keyValuesArray should be an array of arrays.
     const params = new URLSearchParams();                // each array containing the key and value at respective indexes.
     keyValuesArray.forEach(pair => {
-      params.append(pair[0], pair[2]);
+      params.append(pair[0], pair[1]);
     });
 
     return params;
