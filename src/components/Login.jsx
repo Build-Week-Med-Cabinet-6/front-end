@@ -48,6 +48,7 @@ const Login = (
     >
       Submit
     </button>
+    <Link to="/register">Register</Link>
   </Form>
 );
 
@@ -83,6 +84,6 @@ const FormikSignIn = withFormik({
   },
 })(Login);
 
-render(<FormikSignIn />, document.getElementById("root"));
+render(<Router><FormikSignIn /></Router>, document.getElementById("root"));
 
 export default FormikSignIn;
