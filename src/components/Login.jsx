@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import * as Yup from "yup";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+import { Button } from 'reactstrap';
 
+import Wrapper from './Wrapper.style';
+import FormContainer from './FormContainer.style';
+import FormErrorAlert from './FormErrorAlert.style';
 import { withFormik, Form, Field } from "formik";
 import axios from "axios";
 import auth from "./auth";
@@ -18,37 +22,50 @@ const Login = (
   },
   props
 ) => (
-  <Form>
-    <div>
-      <p>Login:</p>
-      <Field
-        type="text"
-        name="username"
-        placeholder="Username"
-        className="fields"
-      />
-      {touched.username && errors.username && <p>{errors.username}</p>}
-    </div>
+  <Wrapper>
+    <FormContainer>
+      <Form>
+        <FormErrorAlert render={errors.username} errorMessage={errors.username}/>
+        <FormErrorAlert render={errors.password && touched.password} errorMessage={errors.password}/>
+        <div>
+        <h2 className="h1">Login</h2>
+          <Field
+            type="text"
+            name="username"
+            placeholder="Username"
+            className="fields"
+          />
+        </div>
 
-    <div>
-      <Field
-        type="password"
-        name="password"
-        placeholder="Password"
-        className="fields"
-      />
-      {touched.password && errors.password && <p>{errors.password}</p>}
-    </div>
-
-    <button
-      disabled={isSubmitting}
-      onClick={() => {
-        auth.login(() => {});
-      }}
-    >
-      Submit
-    </button>
-  </Form>
+        <div>
+          <Field
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="fields"
+          />
+        </div>
+        <Button
+        type="submit"
+          disabled={isSubmitting}
+          onClick={() => {
+            auth.login(() => {});
+          }}
+          color={
+            values.username 
+            && !errors.username 
+            && values.password 
+            && !errors.password 
+              ? "success" 
+              : "secondary"
+          }
+        >
+          Submit
+        </Button>
+        <Link to="/register">Register</Link>
+      </Form>
+    </FormContainer>
+  </Wrapper>
 );
 
 const FormikSignIn = withFormik({
@@ -83,6 +100,6 @@ const FormikSignIn = withFormik({
   },
 })(Login);
 
-render(<FormikSignIn />, document.getElementById("root"));
+render(<Router><FormikSignIn /></Router>, document.getElementById("root"));
 
 export default FormikSignIn;

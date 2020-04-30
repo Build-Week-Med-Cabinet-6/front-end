@@ -6,39 +6,54 @@ import { withFormik, Form, Field } from "formik";
 import axios from "axios";
 import auth from "./auth";
 import { BrowserRouter as Router, Link } from "react-router-dom";
-import Login from "./Login";
+import { Button } from 'reactstrap';
+import Wrapper from './Wrapper.style';
+import FormContainer from './FormContainer.style';
+import FormErrorAlert from './FormErrorAlert.style';
 const SignUp = ({ values, errors, touched, isSubmitting }, props) => (
-  <Form>
-    <div>
-      <p>Register:</p>
-      <Field
-        type="text"
-        name="username"
-        placeholder="Username"
-        className="fields"
-      />
-      {touched.username && errors.username && <p>{errors.username}</p>}
-    </div>
+  <Wrapper>
+    <FormContainer>
+      <Form>
+        <FormErrorAlert render={errors.username} errorMessage={errors.username}/>
+        <FormErrorAlert render={errors.password && touched.password} errorMessage={errors.password}/>
+        <div>
+          <h2 className="h1">Register</h2>
+          <Field
+            type="text"
+            name="username"
+            placeholder="Username"
+            className="fields"
+          />
+        </div>
 
-    <div>
-      <Field
-        type="password"
-        name="password"
-        placeholder="Password"
-        className="fields"
-      />
-      {touched.password && errors.password && <p>{errors.password}</p>}
-    </div>
-
-    <button
-      disabled={isSubmitting}
-      onClick={() => {
-        auth.login(() => {});
-      }}
-    >
-      Submit
-    </button>
-  </Form>
+        <div>
+          <Field
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="fields"
+          />
+        </div>
+        <Button
+        type="submit"
+          disabled={isSubmitting}
+          onClick={() => {
+            auth.login(() => {});
+          }}
+          color={
+            values.username 
+            && !errors.username 
+            && values.password 
+            && !errors.password 
+              ? "success" 
+              : "secondary"
+          }
+        >
+          Submit
+        </Button>
+      </Form>
+    </FormContainer>
+  </Wrapper>
 );
 const FormikSignUp = withFormik({
   mapPropsToValues({ username, password }) {
@@ -48,8 +63,8 @@ const FormikSignUp = withFormik({
     };
   },
   validationSchema: Yup.object().shape({
-    username: Yup.string().min(4).required("must be 4+ chars long"),
-    password: Yup.string().min(4).required("must be 4+ chars long"),
+    username: Yup.string().min(4).required("username must be atleast 4 characters"),
+    password: Yup.string().min(4).required("password must be atleast 4 characters"),
   }),
   handleSubmit(
     values,
