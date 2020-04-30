@@ -49,12 +49,15 @@ function Search({ strainsQuery }) {
 
   const onSearchSubmit = (evt) => {
     evt.preventDefault();
+
+    setEffectsDropdown(effects);
+    setFlavorsDropdown(flavors);
+
     const paramsArray = [
       ['effects', searchStrings.effects],
       ['flavors', searchStrings.flavors]
     ];
     const params = generateUrlEncodedParams(paramsArray)
-
     axios.post(`${url}/query`, params)
     .then(res => strainsQuery(res.data))
     .catch(err => console.log(err));
@@ -69,7 +72,21 @@ function Search({ strainsQuery }) {
     const searchString = mySearchString 
       ? `${mySearchString}, ${value}`
       : value;
-  
+
+      const toggleDropdownSearchTerm = (dropdown, setDropdown) => {
+        const dropdownItemState = dropdown[value][1]
+        return setDropdown({
+          ...dropdown,
+          [value]: [value, !dropdownItemState],
+        });
+      }
+
+      if(myCategory === "effects") {
+        toggleDropdownSearchTerm(effectsDropdown, setEffectsDropdown);
+      } else if(myCategory ===  "flavors") {
+        toggleDropdownSearchTerm(flavorsDropdown, setFlavorsDropdown);
+      }
+
     return setSearchStrings({
       ...searchStrings,
       [myCategory]: searchString,
@@ -94,8 +111,9 @@ function Search({ strainsQuery }) {
         <DropdownMenu>
           {Object.values(effectsDropdown).map(effect => {
               return(
-                <DropdownItem 
-                  onClick={onAddSearchTerm} 
+                <DropdownItem
+                  style={{ backgroundColor: effect[1] ? "#CCC" : "", }}
+                  onClick={onAddSearchTerm}
                   name="effects" 
                   value={effect[0]}
                   >
@@ -113,6 +131,7 @@ function Search({ strainsQuery }) {
         {Object.values(flavorsDropdown).map(flavor => {
               return(
                 <DropdownItem 
+                  style={{ backgroundColor: flavor[1] ? "#CCC" : "", }}
                   onClick={onAddSearchTerm} 
                   name="flavors" 
                   value={flavor[0]}
