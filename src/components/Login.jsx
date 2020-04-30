@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import * as Yup from "yup";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+import { Button } from 'reactstrap';
 import FormErrorAlert from './FormErrorAlert';
 
 import { withFormik, Form, Field } from "formik";
@@ -40,15 +41,23 @@ const Login = (
         className="fields"
       />
     </div>
-
-    <button
+    <Button
+    type="submit"
       disabled={isSubmitting}
       onClick={() => {
         auth.login(() => {});
       }}
+      color={
+        values.username 
+        && !errors.username 
+        && values.password 
+        && !errors.password 
+          ? "success" 
+          : "secondary"
+      }
     >
       Submit
-    </button>
+    </Button>
     <Link to="/register">Register</Link>
   </Form>
 );

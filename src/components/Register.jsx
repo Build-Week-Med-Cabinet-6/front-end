@@ -6,6 +6,7 @@ import { withFormik, Form, Field } from "formik";
 import axios from "axios";
 import auth from "./auth";
 import { BrowserRouter as Router, Link } from "react-router-dom";
+import { Button } from 'reactstrap';
 import FormErrorAlert from './FormErrorAlert';
 const SignUp = ({ values, errors, touched, isSubmitting }, props) => (
   <Form>
@@ -29,15 +30,23 @@ const SignUp = ({ values, errors, touched, isSubmitting }, props) => (
         className="fields"
       />
     </div>
-
-    <button
+    <Button
+    type="submit"
       disabled={isSubmitting}
       onClick={() => {
         auth.login(() => {});
       }}
+      color={
+        values.username 
+        && !errors.username 
+        && values.password 
+        && !errors.password 
+          ? "success" 
+          : "secondary"
+      }
     >
       Submit
-    </button>
+    </Button>
   </Form>
 );
 const FormikSignUp = withFormik({
