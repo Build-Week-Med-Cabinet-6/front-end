@@ -13,6 +13,7 @@ import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import Profile from './Profile';
+import Wrapper from './Wrapper';
 
 // route
 import PrivateRoute from "./PrivateRoute";
@@ -24,15 +25,20 @@ function App() {
         <Switch>
           <PrivateRoute exact path="/protected" component={PrivateRoute} />
           <Route exact path="/">
-            <Login />
-            <Link to="/register">Register</Link>
+            <Wrapper>
+              <Login />
+            </Wrapper>
           </Route>
 
           <Route path="/profile" component={Profile}/>
 
           <Route exact path="/login" component={Login} />
           <PrivateRoute exact path="/protected" component={Home} />
-          <Route path="/register" component={Register} />
+          <Route path="/register">
+            <Wrapper>
+              <Register />
+            </Wrapper>
+          </Route>
           <Route component={Register} />
         </Switch>
       </div>
