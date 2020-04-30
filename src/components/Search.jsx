@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { effects, flavors } from '../constants';
 
 function Search({ strainsQuery }) {
   const url = "https://medcab6api.herokuapp.com/products";
@@ -16,6 +17,8 @@ function Search({ strainsQuery }) {
 
   const [searchStrings, setSearchStrings] = useState(initialSearchStrings);
   const [textSearch, setTextSearch] = useState("");
+  const [effectsDropdown, setEffectsDropdown] = useState(effects);
+  const [flavorsDropdown, setFlavorsDropdown] = useState(flavors);
   const [dropdownOpen, setDropdownOpen] = useState(initialDropdownState);
 
   const toggle = (id) => {
@@ -89,10 +92,16 @@ function Search({ strainsQuery }) {
           Effects
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem onClick={onAddSearchTerm} name="effects" value="aroused">aroused</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="effects" value="creative">creative</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="effects" value="energetic">energetic</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="effects" value="euphoric">euphoric</DropdownItem>
+          {Object.values(effectsDropdown).map(effect => {
+              return(
+                <DropdownItem 
+                  onClick={onAddSearchTerm} 
+                  name="effects" 
+                  value={effect[0]}
+                  >
+                    {effect[0]}
+                </DropdownItem>
+                )})}
         </DropdownMenu>
       </Dropdown>
 
@@ -101,10 +110,16 @@ function Search({ strainsQuery }) {
           Flavors
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem onClick={onAddSearchTerm} name="flavors" value="ammonia">ammonia</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="flavors" value="apple">apple</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="flavors" value="apricot">apricot</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="flavors" value="berry">berry</DropdownItem>
+        {Object.values(flavorsDropdown).map(flavor => {
+              return(
+                <DropdownItem 
+                  onClick={onAddSearchTerm} 
+                  name="flavors" 
+                  value={flavor[0]}
+                  >
+                    {flavor[0]}
+                </DropdownItem>
+                )})}
         </DropdownMenu>
       </Dropdown>
       <Dropdown isOpen={dropdownOpen.search} toggle={() => toggle("search")}>
