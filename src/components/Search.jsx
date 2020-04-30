@@ -11,6 +11,7 @@ function Search({ strainsQuery }) {
   const initialDropdownState = {
     effects: false,
     flavors: false,
+    search: false,
   }
 
   const [searchStrings, setSearchStrings] = useState(initialSearchStrings);
@@ -73,11 +74,17 @@ function Search({ strainsQuery }) {
   }
 
   return(
-    <form>
-      <label htmlFor="search">Search:</label>
-      <input onChange={onSearchTextChange} type="text" name="search" id="search" value={textSearch}/>
-      <label htmlFor="effects">Effects:</label>
-      <Dropdown style={{display: "inline-block", marginRight: "3rem" }} isOpen={dropdownOpen.effects} toggle={() => toggle("effects")}>
+    <form
+      style={{
+        width: "60%",
+        maxWidth: "500px",
+        display: 'flex',
+        padding: '2vh 0',
+        justifyContent: 'space-between',
+      }}
+    >
+      <input onChange={onSearchTextChange} type="text" name="search" id="search" placeholder="Search" value={textSearch}/>
+      <Dropdown isOpen={dropdownOpen.effects} toggle={() => toggle("effects")}>
         <DropdownToggle caret>
           Effects
         </DropdownToggle>
@@ -89,7 +96,7 @@ function Search({ strainsQuery }) {
         </DropdownMenu>
       </Dropdown>
 
-      <Dropdown style={{display: "inline-block", marginRight: "1rem" }} isOpen={dropdownOpen.flavors} toggle={() => toggle("flavors")}>
+      <Dropdown isOpen={dropdownOpen.flavors} toggle={() => toggle("flavors")}>
         <DropdownToggle caret>
           Flavors
         </DropdownToggle>
@@ -100,9 +107,15 @@ function Search({ strainsQuery }) {
           <DropdownItem onClick={onAddSearchTerm} name="flavors" value="berry">berry</DropdownItem>
         </DropdownMenu>
       </Dropdown>
-
-      <button onClick={onSearchSubmit}>Search with Dropdowns</button>
-      <button onClick={onTextSearch}>Search with text box</button>
+      <Dropdown isOpen={dropdownOpen.search} toggle={() => toggle("search")}>
+        <DropdownToggle caret>
+          Search
+        </DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem onClick={onSearchSubmit} name="search">Dropdown boxes Search</DropdownItem>
+          <DropdownItem onClick={onTextSearch} name="search">Textbox Search</DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
     </form>
 
 
