@@ -80,7 +80,7 @@ function Search({ strainsQuery }) {
     <form
       style={{
         width: "60%",
-        maxWidth: "500px",
+        minWidth: "500px",
         display: 'flex',
         padding: '2vh 0',
         justifyContent: 'space-between',
@@ -132,32 +132,6 @@ function Search({ strainsQuery }) {
         </DropdownMenu>
       </Dropdown>
     </form>
-
-
-    // <div>
-    //   <form>
-    //     <label htmlFor="search">Search:</label>
-    //     <input onChange={onSearchTextChange} type="text" name="search" id="search" value={textSearch}/>
-    //     <label htmlFor="effects">Effects:</label>
-    //     <select onChange={onAddSearchTerm} id="effects" multiple>
-    //       <option value="aroused">aroused</option>
-    //       <option value="creative">creative</option>
-    //       <option value="energetic">energetic</option>
-    //       <option value="euphoric">euphoric</option>
-    //     </select>
-
-    //     <label htmlFor="flavors">Flavors:</label>
-    //     <select onChange={onAddSearchTerm} id="flavors" multiple>
-    //       <option value="ammonia">ammonia</option>
-    //       <option value="apple">apple</option>
-    //       <option value="apricot">apricot</option>
-    //       <option value="berry">berry</option>
-    //     </select>
-
-    //     <button onClick={onSearchSubmit}>Search with Dropdowns</button>
-    //     <button onClick={onTextSearch}>Search with text box</button>
-    //   </form>
-    // </div>
   );
 }
 
