@@ -22,7 +22,7 @@ const Login = (
   },
   props
 ) => (
-  <Wrapper>
+  <Wrapper top>
     <FormContainer>
       <Form>
         <FormErrorAlert render={errors.username} errorMessage={errors.username}/>

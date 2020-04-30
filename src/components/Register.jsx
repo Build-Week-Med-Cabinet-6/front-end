@@ -11,7 +11,7 @@ import Wrapper from './Wrapper.style';
 import FormContainer from './FormContainer.style';
 import FormErrorAlert from './FormErrorAlert.style';
 const SignUp = ({ values, errors, touched, isSubmitting }, props) => (
-  <Wrapper>
+  <Wrapper top>
     <FormContainer>
       <Form>
         <FormErrorAlert render={errors.username} errorMessage={errors.username}/>
@@ -63,8 +63,14 @@ const FormikSignUp = withFormik({
     };
   },
   validationSchema: Yup.object().shape({
-    username: Yup.string().min(4).required("username must be atleast 4 characters"),
-    password: Yup.string().min(4).required("password must be atleast 4 characters"),
+    username: Yup
+      .string()
+      .min(4, "username must be at least 4 characters")
+      .required("username is required"),
+    password: Yup
+      .string()
+      .min(4, "password must be at least 4 characters")
+      .required("password is required"),
   }),
   handleSubmit(
     values,
