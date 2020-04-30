@@ -21,7 +21,7 @@ const Login = (
   },
   props
 ) => (
-  <Wrapper>
+  <Wrapper top>
     <Form>
       <FormErrorAlert render={errors.username} errorMessage={errors.username}/>
       <FormErrorAlert render={errors.password && touched.password} errorMessage={errors.password}/>
