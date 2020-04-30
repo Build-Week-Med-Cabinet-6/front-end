@@ -95,6 +95,7 @@ function Search({ strainsQuery }) {
 
   return(
     <form
+      onSubmit={onTextSearch}
       style={{
         width: "60%",
         minWidth: "500px",
@@ -146,8 +147,8 @@ function Search({ strainsQuery }) {
           Search
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem onClick={onSearchSubmit} name="search">Dropdown boxes Search</DropdownItem>
-          <DropdownItem onClick={onTextSearch} name="search">Textbox Search</DropdownItem>
+          <DropdownItem onClick={onSearchSubmit} name="search">Dropdown Search</DropdownItem>
+          <DropdownItem onClick={onTextSearch} name="search">Text Search</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </form>
