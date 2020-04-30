@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { effects, flavors } from '../constants';
 
 function Search({ strainsQuery }) {
   const url = "https://medcab6api.herokuapp.com/products";
@@ -11,10 +12,13 @@ function Search({ strainsQuery }) {
   const initialDropdownState = {
     effects: false,
     flavors: false,
+    search: false,
   }
 
   const [searchStrings, setSearchStrings] = useState(initialSearchStrings);
   const [textSearch, setTextSearch] = useState("");
+  const [effectsDropdown, setEffectsDropdown] = useState(effects);
+  const [flavorsDropdown, setFlavorsDropdown] = useState(flavors);
   const [dropdownOpen, setDropdownOpen] = useState(initialDropdownState);
 
   const toggle = (id) => {
@@ -45,12 +49,15 @@ function Search({ strainsQuery }) {
 
   const onSearchSubmit = (evt) => {
     evt.preventDefault();
+
+    setEffectsDropdown(effects);
+    setFlavorsDropdown(flavors);
+
     const paramsArray = [
       ['effects', searchStrings.effects],
       ['flavors', searchStrings.flavors]
     ];
     const params = generateUrlEncodedParams(paramsArray)
-
     axios.post(`${url}/query`, params)
     .then(res => strainsQuery(res.data))
     .catch(err => console.log(err));
@@ -65,7 +72,21 @@ function Search({ strainsQuery }) {
     const searchString = mySearchString 
       ? `${mySearchString}, ${value}`
       : value;
-  
+
+      const toggleDropdownSearchTerm = (dropdown, setDropdown) => {
+        const dropdownItemState = dropdown[value][1]
+        return setDropdown({
+          ...dropdown,
+          [value]: [value, !dropdownItemState],
+        });
+      }
+
+      if(myCategory === "effects") {
+        toggleDropdownSearchTerm(effectsDropdown, setEffectsDropdown);
+      } else if(myCategory ===  "flavors") {
+        toggleDropdownSearchTerm(flavorsDropdown, setFlavorsDropdown);
+      }
+
     return setSearchStrings({
       ...searchStrings,
       [myCategory]: searchString,
@@ -73,63 +94,63 @@ function Search({ strainsQuery }) {
   }
 
   return(
-    <form>
-      <label htmlFor="search">Search:</label>
-      <input onChange={onSearchTextChange} type="text" name="search" id="search" value={textSearch}/>
-      <label htmlFor="effects">Effects:</label>
-      <Dropdown style={{display: "inline-block", marginRight: "3rem" }} isOpen={dropdownOpen.effects} toggle={() => toggle("effects")}>
+    <form
+      style={{
+        width: "60%",
+        minWidth: "500px",
+        display: 'flex',
+        padding: '2vh 0',
+        justifyContent: 'space-between',
+      }}
+    >
+      <input onChange={onSearchTextChange} type="text" name="search" id="search" placeholder="Search" value={textSearch}/>
+      <Dropdown isOpen={dropdownOpen.effects} toggle={() => toggle("effects")}>
         <DropdownToggle caret>
           Effects
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem onClick={onAddSearchTerm} name="effects" value="aroused">aroused</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="effects" value="creative">creative</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="effects" value="energetic">energetic</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="effects" value="euphoric">euphoric</DropdownItem>
+          {Object.values(effectsDropdown).map(effect => {
+              return(
+                <DropdownItem
+                  style={{ backgroundColor: effect[1] ? "#CCC" : "", }}
+                  onClick={onAddSearchTerm}
+                  name="effects" 
+                  value={effect[0]}
+                  >
+                    {effect[0]}
+                </DropdownItem>
+                )})}
         </DropdownMenu>
       </Dropdown>
 
-      <Dropdown style={{display: "inline-block", marginRight: "1rem" }} isOpen={dropdownOpen.flavors} toggle={() => toggle("flavors")}>
+      <Dropdown isOpen={dropdownOpen.flavors} toggle={() => toggle("flavors")}>
         <DropdownToggle caret>
           Flavors
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem onClick={onAddSearchTerm} name="flavors" value="ammonia">ammonia</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="flavors" value="apple">apple</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="flavors" value="apricot">apricot</DropdownItem>
-          <DropdownItem onClick={onAddSearchTerm} name="flavors" value="berry">berry</DropdownItem>
+        {Object.values(flavorsDropdown).map(flavor => {
+              return(
+                <DropdownItem 
+                  style={{ backgroundColor: flavor[1] ? "#CCC" : "", }}
+                  onClick={onAddSearchTerm} 
+                  name="flavors" 
+                  value={flavor[0]}
+                  >
+                    {flavor[0]}
+                </DropdownItem>
+                )})}
         </DropdownMenu>
       </Dropdown>
-
-      <button onClick={onSearchSubmit}>Search with Dropdowns</button>
-      <button onClick={onTextSearch}>Search with text box</button>
+      <Dropdown isOpen={dropdownOpen.search} toggle={() => toggle("search")}>
+        <DropdownToggle caret>
+          Search
+        </DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem onClick={onSearchSubmit} name="search">Dropdown boxes Search</DropdownItem>
+          <DropdownItem onClick={onTextSearch} name="search">Textbox Search</DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
     </form>
-
-
-    // <div>
-    //   <form>
-    //     <label htmlFor="search">Search:</label>
-    //     <input onChange={onSearchTextChange} type="text" name="search" id="search" value={textSearch}/>
-    //     <label htmlFor="effects">Effects:</label>
-    //     <select onChange={onAddSearchTerm} id="effects" multiple>
-    //       <option value="aroused">aroused</option>
-    //       <option value="creative">creative</option>
-    //       <option value="energetic">energetic</option>
-    //       <option value="euphoric">euphoric</option>
-    //     </select>
-
-    //     <label htmlFor="flavors">Flavors:</label>
-    //     <select onChange={onAddSearchTerm} id="flavors" multiple>
-    //       <option value="ammonia">ammonia</option>
-    //       <option value="apple">apple</option>
-    //       <option value="apricot">apricot</option>
-    //       <option value="berry">berry</option>
-    //     </select>
-
-    //     <button onClick={onSearchSubmit}>Search with Dropdowns</button>
-    //     <button onClick={onTextSearch}>Search with text box</button>
-    //   </form>
-    // </div>
   );
 }
 
