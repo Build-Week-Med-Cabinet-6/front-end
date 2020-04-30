@@ -6,9 +6,9 @@ function StrainsList({ strainsArray }) {
     <div
       style={{ width: "90%", maxWidth: "550px", margin: "10% auto" }}
     >
-      {strainsArray.map(strain => {
+      {strainsArray.map((strain, index) => {
           return (
-            <StrainsCard strain={strain}/>
+            <StrainsCard key={index} strain={strain}/>
           );
         })}
     </div>

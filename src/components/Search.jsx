@@ -39,8 +39,9 @@ function Search({ strainsQuery }) {
 
   const onTextSearch = (evt) => {
     evt.preventDefault();
-
     const params = generateUrlEncodedParams([["text", textSearch]]);
+
+    setTextSearch("");
 
     axios.post(`${url}/search`, params)
     .then(res => strainsQuery(res.data))
@@ -52,6 +53,8 @@ function Search({ strainsQuery }) {
 
     setEffectsDropdown(effects);
     setFlavorsDropdown(flavors);
+
+    setSearchStrings(initialSearchStrings);
 
     const paramsArray = [
       ['effects', searchStrings.effects],
