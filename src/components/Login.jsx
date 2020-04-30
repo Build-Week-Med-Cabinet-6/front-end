@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import * as Yup from "yup";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+import FormErrorAlert from './FormErrorAlert';
 
 import { withFormik, Form, Field } from "formik";
 import axios from "axios";
@@ -19,6 +20,8 @@ const Login = (
   props
 ) => (
   <Form>
+    <FormErrorAlert render={errors.username} errorMessage={errors.username}/>
+    <FormErrorAlert render={errors.password && touched.password} errorMessage={errors.password}/>
     <div>
       <p>Login:</p>
       <Field
@@ -27,7 +30,6 @@ const Login = (
         placeholder="Username"
         className="fields"
       />
-      {touched.username && errors.username && <p>{errors.username}</p>}
     </div>
 
     <div>
@@ -37,7 +39,6 @@ const Login = (
         placeholder="Password"
         className="fields"
       />
-      {touched.password && errors.password && <p>{errors.password}</p>}
     </div>
 
     <button

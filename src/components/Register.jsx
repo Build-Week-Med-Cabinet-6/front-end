@@ -6,9 +6,11 @@ import { withFormik, Form, Field } from "formik";
 import axios from "axios";
 import auth from "./auth";
 import { BrowserRouter as Router, Link } from "react-router-dom";
-import Login from "./Login";
+import FormErrorAlert from './FormErrorAlert';
 const SignUp = ({ values, errors, touched, isSubmitting }, props) => (
   <Form>
+    <FormErrorAlert render={errors.username} errorMessage={errors.username}/>
+    <FormErrorAlert render={errors.password && touched.password} errorMessage={errors.password}/>
     <div>
       <p>Register:</p>
       <Field
@@ -17,7 +19,6 @@ const SignUp = ({ values, errors, touched, isSubmitting }, props) => (
         placeholder="Username"
         className="fields"
       />
-      {touched.username && errors.username && <p>{errors.username}</p>}
     </div>
 
     <div>
@@ -27,7 +28,6 @@ const SignUp = ({ values, errors, touched, isSubmitting }, props) => (
         placeholder="Password"
         className="fields"
       />
-      {touched.password && errors.password && <p>{errors.password}</p>}
     </div>
 
     <button
@@ -48,8 +48,8 @@ const FormikSignUp = withFormik({
     };
   },
   validationSchema: Yup.object().shape({
-    username: Yup.string().min(4).required("must be 4+ chars long"),
-    password: Yup.string().min(4).required("must be 4+ chars long"),
+    username: Yup.string().min(4).required("username must be atleast 4 characters"),
+    password: Yup.string().min(4).required("password must be atleast 4 characters"),
   }),
   handleSubmit(
     values,
