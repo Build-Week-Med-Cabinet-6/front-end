@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import * as yup from 'yup';
 import axios from 'axios';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import FormErrorAlert from './FormErrorAlert';
 import { effects, flavors } from '../constants';
 
 function Search({ strainsQuery }) {
@@ -14,13 +16,21 @@ function Search({ strainsQuery }) {
     flavors: false,
     search: false,
   }
+  const searchAuthSchema = yup.object().shape({
+    textSearch: yup
+      .string()
+      .required('Please enter a search term.'),
+  });
 
   const [searchStrings, setSearchStrings] = useState(initialSearchStrings);
   const [textSearch, setTextSearch] = useState("");
+  const [textSearchError, setTextSearchError] = useState("");
   const [effectsDropdown, setEffectsDropdown] = useState(effects);
   const [flavorsDropdown, setFlavorsDropdown] = useState(flavors);
   const [dropdownOpen, setDropdownOpen] = useState(initialDropdownState);
+  const [alertVisible, setAlertVisible] = useState(false);
 
+  const onDismiss = () => setAlertVisible(false);
   const toggle = (id) => {
     return setDropdownOpen({
       ...dropdownOpen,
@@ -31,7 +41,7 @@ function Search({ strainsQuery }) {
   const generateUrlEncodedParams = (keyValuesArray) => { // keyValuesArray should be an array of arrays.
     const params = new URLSearchParams();                // each array containing the key and value at respective indexes.
     keyValuesArray.forEach(pair => {
-      params.append(pair[0], pair[2]);
+      params.append(pair[0], pair[1]);
     });
 
     return params;
@@ -39,12 +49,22 @@ function Search({ strainsQuery }) {
 
   const onTextSearch = (evt) => {
     evt.preventDefault();
-
     const params = generateUrlEncodedParams([["text", textSearch]]);
 
-    axios.post(`${url}/search`, params)
-    .then(res => strainsQuery(res.data))
-    .catch(err => console.log(err));
+    yup.reach(searchAuthSchema, 'textSearch')
+    .validate(textSearch)
+    .then(() => {
+      setTextSearch("");
+  
+      axios.post(`${url}/search`, params)
+      .then(res => strainsQuery(res.data))
+      .catch(err => console.log(err));
+    })
+    .catch(err => {
+      const error = err.errors[0];
+      setAlertVisible(true)
+      return setTextSearchError(error);
+    });
   }
 
   const onSearchSubmit = (evt) => {
@@ -52,6 +72,8 @@ function Search({ strainsQuery }) {
 
     setEffectsDropdown(effects);
     setFlavorsDropdown(flavors);
+
+    setSearchStrings(initialSearchStrings);
 
     const paramsArray = [
       ['effects', searchStrings.effects],
@@ -63,7 +85,10 @@ function Search({ strainsQuery }) {
     .catch(err => console.log(err));
   }
 
-  const onSearchTextChange = (evt) => setTextSearch(evt.target.value);
+  const onSearchTextChange = (evt) => {
+    setAlertVisible(false)
+    return setTextSearch(evt.target.value)
+  };
 
   const onAddSearchTerm = (evt) => {
     const value = evt.target.value;
@@ -95,15 +120,23 @@ function Search({ strainsQuery }) {
 
   return(
     <form
+      onSubmit={onTextSearch}
       style={{
-        width: "60%",
-        minWidth: "500px",
+        width: "50%",
+        minWidth: "450px",
         display: 'flex',
-        padding: '2vh 0',
+        padding: '0',
+        margin: '0',
         justifyContent: 'space-between',
       }}
     >
-      <input onChange={onSearchTextChange} type="text" name="search" id="search" placeholder="Search" value={textSearch}/>
+      <div>
+        <input onChange={onSearchTextChange} type="text" name="search" id="search" placeholder="Search" value={textSearch}/>
+        <FormErrorAlert
+            render={alertVisible}
+            errorMessage={textSearchError}
+          />
+      </div>
       <Dropdown isOpen={dropdownOpen.effects} toggle={() => toggle("effects")}>
         <DropdownToggle caret>
           Effects
@@ -146,8 +179,8 @@ function Search({ strainsQuery }) {
           Search
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem onClick={onSearchSubmit} name="search">Dropdown boxes Search</DropdownItem>
-          <DropdownItem onClick={onTextSearch} name="search">Textbox Search</DropdownItem>
+          <DropdownItem onClick={onSearchSubmit} name="search">Dropdown Search</DropdownItem>
+          <DropdownItem onClick={onTextSearch} name="search">Text Search</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </form>

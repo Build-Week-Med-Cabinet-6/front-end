@@ -4,9 +4,8 @@ import * as Yup from "yup";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import { Button } from 'reactstrap';
 
-import Wrapper from './Wrapper.style';
-import FormContainer from './FormContainer.style';
-import FormErrorAlert from './FormErrorAlert.style';
+import Wrapper from './Wrapper';
+import FormErrorAlert from './FormErrorAlert';
 import { withFormik, Form, Field } from "formik";
 import axios from "axios";
 import auth from "./auth";
@@ -22,8 +21,7 @@ const Login = (
   },
   props
 ) => (
-  <Wrapper>
-    <FormContainer>
+  <Wrapper top>
       <Form>
         <FormErrorAlert render={errors.username} errorMessage={errors.username}/>
         <FormErrorAlert render={errors.password && touched.password} errorMessage={errors.password}/>
@@ -64,7 +62,6 @@ const Login = (
         </Button>
         <Link to="/register">Register</Link>
       </Form>
-    </FormContainer>
   </Wrapper>
 );
 
