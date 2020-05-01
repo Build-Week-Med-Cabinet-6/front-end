@@ -14,7 +14,7 @@ function Home() {
     <>
       <Header>
         <Search strainsQuery={strainsQuery}/>
-        <Link style={{marginTop: '1rem'}} to="/profile">Profile</Link>
+        <Link to="/profile">Profile</Link>
       </Header>
       <div>
         <StrainsList strainsArray={strains}/>

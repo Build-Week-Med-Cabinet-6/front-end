@@ -122,10 +122,11 @@ function Search({ strainsQuery }) {
     <form
       onSubmit={onTextSearch}
       style={{
-        width: "60%",
-        minWidth: "500px",
+        width: "50%",
+        minWidth: "450px",
         display: 'flex',
-        padding: '2vh 0',
+        padding: '0',
+        margin: '0',
         justifyContent: 'space-between',
       }}
     >
